@@ -89,7 +89,7 @@ public class PropertyXMLReader {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				e.printStackTrace();
-			}finally {
+			} finally {
 				try {
 					inputStream.close();
 				} catch (IOException e1) {
@@ -109,5 +109,8 @@ public class PropertyXMLReader {
 		log.info("请输入属性名：");
 		String attrName = scanner.nextLine();
 		PropertyXMLReader propertyXMLReader = new PropertyXMLReader(fileName, attrName);
+		log.info("按任意键退出。");
+		scanner.nextLine();
+		System.exit(0);
 	}
 }
