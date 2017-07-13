@@ -1,6 +1,8 @@
 package idv.caemasar.countProperty;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashSet;
@@ -43,11 +45,11 @@ public class PropertyXMLReader {
 	private void init(String PROPERTYXML, String PROPERTYNAME) {
 		Element root = doc.getRootElement();
 		getNodes(root);
-		System.out.println(this.PROPERTYNAME + "Set-->Size:::" + pointAttrSet.size());
+		log.info(this.PROPERTYNAME + "Set-->Size:::" + pointAttrSet.size());
 		for (String str : pointAttrSet) {
-			System.out.println(this.PROPERTYNAME + "Set-->List:::" + str);
+			log.info(this.PROPERTYNAME + "Set-->List:::" + str);
 		}
-		System.out.println(this.PROPERTYNAME + "Set-->attrCount:::" + count);
+		log.info(this.PROPERTYNAME + "Set-->attrCount:::" + count);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,9 +76,27 @@ public class PropertyXMLReader {
 		Document document = null;
 		SAXReader reader = new SAXReader();
 		try {
+			log.info("filePath:::" + file);
 			document = reader.read(new File(file));
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			FileInputStream inputStream = null;
+			try {
+				inputStream = new FileInputStream(PROPERTYXML);
+				log.info("filePath:::" + file + "-->error");
+				log.info("filePath-->FileInputStream:::" + inputStream);
+				document = reader.read(inputStream);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				e.printStackTrace();
+			}finally {
+				try {
+					inputStream.close();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
 		}
 		return document;
 	}
@@ -84,9 +104,9 @@ public class PropertyXMLReader {
 	@SuppressWarnings({ "resource", "unused" })
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("请输入文件名：");
+		log.info("请输入文件名：");
 		String fileName = scanner.nextLine();
-		System.out.println("请输入属性名：");
+		log.info("请输入属性名：");
 		String attrName = scanner.nextLine();
 		PropertyXMLReader propertyXMLReader = new PropertyXMLReader(fileName, attrName);
 	}
